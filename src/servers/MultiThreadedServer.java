@@ -6,19 +6,29 @@ import java.net.Socket;
 
 import beans.XmlFileDataBean;
 
+/**
+ * This class open serversocket by given port, and waiting client request until socket stop.
+ * For each request create Threaded.
+ * @author hayk
+ *
+ */
 public class MultiThreadedServer implements Runnable{
 
-    protected int          serverPort   = 8123;
     protected ServerSocket serverSocket = null;
     protected boolean      isStopped    = false;
     protected Thread       runningThread= null;
     XmlFileDataBean configBean = null; 
-    
+
+    /**
+     * class constructor for init startup variable.
+     * @param configBean
+     */
     public MultiThreadedServer(XmlFileDataBean configBean){
     	this.configBean = configBean;
-        this.serverPort = configBean.getPort();
+        //this.serverPort = configBean.getPort();
     }
 
+    @Override
     public void run(){
         synchronized(this){
             this.runningThread = Thread.currentThread();
@@ -44,11 +54,17 @@ public class MultiThreadedServer implements Runnable{
         System.out.println("Server Stopped.") ;
     }
 
-
+/**
+ * 
+ * @return
+ */
     private synchronized boolean isStopped() {
         return this.isStopped;
     }
 
+    /**
+     * 
+     */
     public synchronized void stop(){
         this.isStopped = true;
         try {
@@ -58,11 +74,14 @@ public class MultiThreadedServer implements Runnable{
         }
     }
 
+    /**
+     * 
+     */
     private void openServerSocket() {
         try {
-            this.serverSocket = new ServerSocket(this.serverPort);
+            this.serverSocket = new ServerSocket(configBean.getPort());
         } catch (IOException e) {
-            throw new RuntimeException("Cannot open port " + this.serverPort, e);
+            throw new RuntimeException("Cannot open port " + configBean.getPort(), e);
         }
     }
 

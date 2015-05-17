@@ -12,7 +12,7 @@ import util.FileManager;
 import beans.XmlFileDataBean;
 
 /**
-
+ * 
  */
 public class WorkerRunnable implements Runnable {
 
@@ -28,18 +28,21 @@ public class WorkerRunnable implements Runnable {
 		try {
 			InputStream input = clientSocket.getInputStream();
 			OutputStream output = clientSocket.getOutputStream();
-
-			String[] parseRequest = parseRequest();
 			String responseMeassage = "";
-			System.out.println(parseRequest[0]);
-			if (parseRequest[0].equals("api-1")){
-				responseMeassage = "File size: " + FileManager.getFileSize(parseRequest[1]) + " Bytes" ;
-			} else if (parseRequest[0].equals("api-2")){
-				responseMeassage = "MD5: " + FileManager.getFileMD5(parseRequest[1]) ;
-			} else if (parseRequest[0].equals("api-3")){
-				responseMeassage = "File copied to: " + FileManager.copyFile(parseRequest[1], configBean.getTargetPathPrefix()) ;
+			String[] parseRequest = parseRequest();
+			if(parseRequest != null && parseRequest.length == 2) {
+				
+				//System.out.println(parseRequest[0]);
+				if (parseRequest[0].equals("api-1")){
+					responseMeassage = "File size: " + FileManager.getFileSize(parseRequest[1]) + " Bytes" ;
+				} else if (parseRequest[0].equals("api-2")){
+					responseMeassage = "MD5: " + FileManager.getFileMD5(parseRequest[1]) ;
+				} else if (parseRequest[0].equals("api-3")){
+					responseMeassage = "File copied to: " + FileManager.copyFile(parseRequest[1], configBean.getTargetPathPrefix()) ;
+				}
+			} else {
+				responseMeassage = "Please set paramater";
 			}
-		
 			output.write(("HTTP/1.1 200 OK\n\n " + responseMeassage).getBytes());
 			output.close();
 			input.close();
@@ -48,8 +51,14 @@ public class WorkerRunnable implements Runnable {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Parse request and return array which contains Api name and file path.
+	 * 
+	 * @return
+	 */
 	private String[] parseRequest(){
-		String[] result = new String[2];
+		String[] result = new String[2];//result[0] Api name result[0] filepath
 		BufferedReader in = null;
 		try {
 			in = new BufferedReader( 

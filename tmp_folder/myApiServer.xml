@@ -1,6 +1,6 @@
 <server>
 	<logFile>/home/hayk/projects/taxpayer-wk/MultiServer/tmp_folder/server.log</logFile>
-	<targetPathPrefix>/home/hayk/projects/taxpayer-wk/MultiServer/tmp_folder/unique_</targetPathPrefix>
+	<targetPathPrefix>C:\\gitProjects\\MultiServer\\tmp_folder\\unique_</targetPathPrefix>
 	<host>localhost</host>
 	<port>8123</port>
 </server>
