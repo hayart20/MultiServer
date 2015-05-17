@@ -8,7 +8,10 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URLDecoder;
 
-import util.FileManager;
+import restapi.RestApiBase;
+import restapi.RestApiOne;
+import restapi.RestApiThree;
+import restapi.RestApiTwo;
 import beans.XmlFileDataBean;
 
 /**
@@ -19,11 +22,19 @@ public class WorkerRunnable implements Runnable {
 	protected Socket clientSocket = null;
 	protected XmlFileDataBean configBean = null;
 
+	/**
+	 * 
+	 * @param clientSocket
+	 * @param configBean
+	 */
 	public WorkerRunnable(Socket clientSocket, XmlFileDataBean configBean) {
 		this.clientSocket = clientSocket;
 		this.configBean = configBean;
 	}
 
+	/**
+	 * 
+	 */
 	public void run() {
 		try {
 			InputStream input = clientSocket.getInputStream();
@@ -31,14 +42,17 @@ public class WorkerRunnable implements Runnable {
 			String responseMeassage = "";
 			String[] parseRequest = parseRequest();
 			if(parseRequest != null && parseRequest.length == 2) {
-				
-				//System.out.println(parseRequest[0]);
+				RestApiBase api = new RestApiBase();
 				if (parseRequest[0].equals("api-1")){
-					responseMeassage = "File size: " + FileManager.getFileSize(parseRequest[1]) + " Bytes" ;
+					//responseMeassage = "File size: " + FileManager.getFileSize(parseRequest[1]) + " Bytes" ;
+					api = new RestApiOne();
+					responseMeassage = api.proccess(parseRequest[1], null);
 				} else if (parseRequest[0].equals("api-2")){
-					responseMeassage = "MD5: " + FileManager.getFileMD5(parseRequest[1]) ;
+					api = new RestApiTwo();
+					responseMeassage = api.proccess(parseRequest[1], null);
 				} else if (parseRequest[0].equals("api-3")){
-					responseMeassage = "File copied to: " + FileManager.copyFile(parseRequest[1], configBean.getTargetPathPrefix()) ;
+					api = new RestApiThree();
+					responseMeassage = api.proccess(parseRequest[1], configBean.getTargetPathPrefix());				
 				}
 			} else {
 				responseMeassage = "Please set paramater";

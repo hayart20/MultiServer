@@ -54,7 +54,7 @@ public class FileManager {
 			while ((nread = fis.read(dataBytes)) != -1) {
 				md.update(dataBytes, 0, nread);
 			}
-			
+			fis.close();
 			byte[] mdbytes = md.digest();
 			// convert the byte to hex format method 
 			StringBuffer hexString = new StringBuffer();

@@ -25,7 +25,6 @@ public class MultiThreadedServer implements Runnable{
      */
     public MultiThreadedServer(XmlFileDataBean configBean){
     	this.configBean = configBean;
-        //this.serverPort = configBean.getPort();
     }
 
     @Override

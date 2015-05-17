@@ -1,6 +1,6 @@
 package util;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
@@ -11,7 +11,7 @@ import org.junit.Test;
  */
 public class FileManagerTest {
 
-	//@Test
+	@Test
 	/**
 	 * Test file size method.
 	 */
@@ -21,7 +21,7 @@ public class FileManagerTest {
 		assertNotNull(fileSize);
 	}
 
-	//@Test
+	@Test
 	/**
 	 * Test file MD5 method.
 	 */
